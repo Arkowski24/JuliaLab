@@ -1,0 +1,36 @@
+Lab3:
+1.Profiler Delay: [s]
+  10.0 -> 1, 1, 1, 1, ...
+  5.0 -> 3, 3, 3, 6, ...
+  1.0 -> 9, 9, 9, 9, 18, ...
+  0.5 -> 3, 3, 6, 3, ...
+  0.1 -> 2, 2, 2, 4, ...
+  0.05 -> 154, 154, 154, 1, 154, ...
+  0.01 -> 15, 15, 15, 2, 15, 30, ...
+  0.005 -> 1, 1, 1, 1, 1, ...
+  0.001 -> 1, 1, 2, 1, ...
+  0.0005 -> 7, 7, 7, 7, 14, ...
+  ----
+  0.0001 -> 108, 108, 108, 108, ...
+  0.00005 -> 975, 975, 975
+  0.00001 -> Buffer full 28722, 28722
+  0.000005 -> Buffer full 28738, 28739
+  ./profile.jl 23 macro expansion
+
+2.Graphs:
+0. No optimization:
+  23.276134 seconds (123.85 M allocations: 6.585 GiB, 25.26% gc time)
+1. Deleted global variable:
+  19.804527 seconds (122.20 M allocations: 6.559 GiB, 26.12% gc time)
+2. Multiple dispatch in node_str:
+  19.862087 seconds (122.21 M allocations: 6.559 GiB, 25.65% gc time)
+3. Changed to string builder in node_str:
+  20.186373 seconds (122.13 M allocations: 3.467 GiB, 20.84% gc time)
+4. Added types to struct:
+  18.873262 seconds (122.09 M allocations: 3.466 GiB, 20.71% gc time)
+5. Using zeros(Int8, N, N) instead of manual zeroing Array{Int64,2}(N, N):
+  4.779637 seconds (11.59 M allocations: 456.935 MiB, 9.29% gc time)
+6. Changed method signature of BFS, problem with types deduction:
+  2.581977 seconds (11.39 M allocations: 446.715 MiB, 12.03% gc time)
+7. Added vector type ( Vector{NodeType}()), problem with type deduction:
+  2.507496 seconds (11.40 M allocations: 446.867 MiB, 13.88% gc time)
